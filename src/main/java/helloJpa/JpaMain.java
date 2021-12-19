@@ -1,7 +1,5 @@
 package helloJpa;
 
-import org.hibernate.Transaction;
-
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
@@ -17,15 +15,16 @@ public class JpaMain {
 
         tx.begin();
 
-        Member member = new Member();
-        member.setId(1L);
-        member.setName("hello");
+        try {
+            Member member = em.find(Member.class, 1L);
+            member.setName("hello!");
 
-        em.persist(member);
-
-        tx.commit();
-
-        em.close();
+            tx.commit();
+        } catch (Exception e) {
+            tx.rollback();
+        } finally {
+            em.close();
+        }
 
         emf.close();
     }
