@@ -1,4 +1,6 @@
-package helloJpa;
+package jpabook;
+
+import helloJpa.Member;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -16,12 +18,6 @@ public class JpaMain {
         tx.begin();
 
         try {
-            Member member = new Member();
-            member.setUsername("hi");
-
-            System.out.println("================");
-            em.persist(member);
-            System.out.println("================");
 
             tx.commit();
         } catch (Exception e) {
