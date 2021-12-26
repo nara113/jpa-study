@@ -1,4 +1,4 @@
-package helloJpa;
+package helloJpa2;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -16,12 +16,18 @@ public class JpaMain {
         tx.begin();
 
         try {
-            Member member = new Member();
-            member.setUsername("hi");
+            Team team = new Team();
+            team.setName("teamA");
 
-            System.out.println("================");
-            em.persist(member);
-            System.out.println("================");
+            em.persist(team);
+
+            Memb memb = new Memb();
+            memb.setName("memberA");
+            memb.changeTeam(team);
+
+            em.persist(memb);
+
+//            team.addMember(memb);
 
             tx.commit();
         } catch (Exception e) {
