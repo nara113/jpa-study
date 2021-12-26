@@ -16,13 +16,18 @@ public class Memb {
 
     private String name;
 
-    @ManyToOne
-    @JoinColumn(name = "team_id")
-    private Team team;
+//    @ManyToOne
+//    @JoinColumn(name = "team_id")
+//    private Team team;
+//
+//    // 연관관계 편의 메소드
+//    public void changeTeam(Team team) {
+//        this.setTeam(team);
+//        team.getMembers().add(this);
+//    }
 
-    // 연관관계 편의 메소드
-    public void changeTeam(Team team) {
-        this.setTeam(team);
-        team.getMembers().add(this);
-    }
+    // 일대다 양방향
+    @ManyToOne
+    @JoinColumn(name = "team_id", insertable = false, updatable = false)
+    private Team team;
 }

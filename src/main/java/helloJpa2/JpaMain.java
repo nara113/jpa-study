@@ -23,11 +23,10 @@ public class JpaMain {
 
             Memb memb = new Memb();
             memb.setName("memberA");
-            memb.changeTeam(team);
 
             em.persist(memb);
 
-//            team.addMember(memb);
+            team.getMembers().add(memb);
 
             tx.commit();
         } catch (Exception e) {
