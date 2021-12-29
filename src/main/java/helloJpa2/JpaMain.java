@@ -16,17 +16,19 @@ public class JpaMain {
         tx.begin();
 
         try {
-            Team team = new Team();
-            team.setName("teamA");
+//            method1(em);
 
-            em.persist(team);
+            Movie movie = new Movie();
+            movie.setName("gram");
+            movie.setPrice(123);
+            movie.setActor("A");
 
-            Memb memb = new Memb();
-            memb.setName("memberA");
+            em.persist(movie);
 
-            em.persist(memb);
+            em.flush();
+            em.clear();
 
-            team.getMembers().add(memb);
+            Itemm itemm = em.find(Itemm.class, movie.getId());
 
             tx.commit();
         } catch (Exception e) {
@@ -36,5 +38,19 @@ public class JpaMain {
         }
 
         emf.close();
+    }
+
+    private static void method1(EntityManager em) {
+        Team team = new Team();
+        team.setName("teamA");
+
+        em.persist(team);
+
+        Memb memb = new Memb();
+        memb.setName("memberA");
+
+        em.persist(memb);
+
+        team.getMembers().add(memb);
     }
 }
