@@ -4,6 +4,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class JpaMain {
@@ -17,26 +18,15 @@ public class JpaMain {
         tx.begin();
 
         try {
-//            method1(em);
-//            method2(em);
-//            method3(em);
+            WorkPeriod workPeriod = new WorkPeriod(LocalDateTime.now(), LocalDateTime.now());
 
-            Parent parent = new Parent();
+            Address address = new Address("street", "zipcode", "city");
 
-            Child c1 = new Child();
-            Child c2 = new Child();
+            Memb m = new Memb();
+            m.setWorkPeriod(workPeriod);
+            m.setAddress(address);
 
-            // cascade ALL : c1, c2 도 persistk
-            parent.getChildren().add(c1);
-            parent.getChildren().add(c2);
-
-            em.persist(parent);
-
-            em.flush();
-            em.clear();
-
-            Parent p1 = em.find(Parent.class, parent.getId());
-            p1.getChildren().remove(0); //orphanRemoval = true
+            em.persist(m);
 
             tx.commit();
         } catch (Exception e) {
@@ -46,6 +36,25 @@ public class JpaMain {
         }
 
         emf.close();
+    }
+
+    private static void method4(EntityManager em) {
+        Parent parent = new Parent();
+
+        Child c1 = new Child();
+        Child c2 = new Child();
+
+        // cascade ALL : c1, c2 도 persistk
+        parent.getChildren().add(c1);
+        parent.getChildren().add(c2);
+
+        em.persist(parent);
+
+        em.flush();
+        em.clear();
+
+        Parent p1 = em.find(Parent.class, parent.getId());
+        p1.getChildren().remove(0); //orphanRemoval = true
     }
 
     private static void method3(EntityManager em) {

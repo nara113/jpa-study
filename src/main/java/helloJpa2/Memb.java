@@ -19,6 +19,18 @@ public class Memb {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "team_id")
     private Team team;
+
+    @Embedded
+    private WorkPeriod workPeriod;
+
+    private Address address;
+
+    @AttributeOverrides({
+            @AttributeOverride(name = "street", column = @Column(name = "work_street")),
+            @AttributeOverride(name = "zipcode", column = @Column(name = "work_zipcode")),
+            @AttributeOverride(name = "city", column = @Column(name = "work_city"))
+    })
+    private Address workAddress;
 //
 //    // 연관관계 편의 메소드
 //    public void changeTeam(Team team) {
