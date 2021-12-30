@@ -18,15 +18,11 @@ public class JpaMain {
         tx.begin();
 
         try {
-            WorkPeriod workPeriod = new WorkPeriod(LocalDateTime.now(), LocalDateTime.now());
+            WorkPeriod w1 = new WorkPeriod(LocalDateTime.MAX, LocalDateTime.MAX);
+            WorkPeriod w2 = new WorkPeriod(LocalDateTime.MAX, LocalDateTime.MAX);
 
-            Address address = new Address("street", "zipcode", "city");
-
-            Memb m = new Memb();
-            m.setWorkPeriod(workPeriod);
-            m.setAddress(address);
-
-            em.persist(m);
+            System.out.println("w1 == w2 : " + (w1 == w2));
+            System.out.println("w1 equals w2 : " + (w1.equals(w2))); //값타입은 동등성비교 (equals 재정의)
 
             tx.commit();
         } catch (Exception e) {
@@ -36,6 +32,18 @@ public class JpaMain {
         }
 
         emf.close();
+    }
+
+    private static void method5(EntityManager em) {
+        WorkPeriod workPeriod = new WorkPeriod(LocalDateTime.now(), LocalDateTime.now());
+
+        Address address = new Address("street", "zipcode", "city");
+
+        Memb m = new Memb();
+        m.setWorkPeriod(workPeriod);
+        m.setAddress(address);
+
+        em.persist(m);
     }
 
     private static void method4(EntityManager em) {
