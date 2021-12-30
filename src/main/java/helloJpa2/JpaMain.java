@@ -19,29 +19,24 @@ public class JpaMain {
         try {
 //            method1(em);
 //            method2(em);
-            Team t1 = new Team();
-            t1.setName("T1");
-            em.persist(t1);
+//            method3(em);
 
-            Team t2 = new Team();
-            t2.setName("T2");
-            em.persist(t2);
+            Parent parent = new Parent();
 
-            Memb m1 = new Memb();
-            m1.setName("M1");
-            m1.setTeam(t1);
-            em.persist(m1);
+            Child c1 = new Child();
+            Child c2 = new Child();
 
-            Memb m2 = new Memb();
-            m2.setName("M2");
-            m2.setTeam(t2);
-            em.persist(m2);
+            // cascade ALL : c1, c2 도 persistk
+            parent.getChildren().add(c1);
+            parent.getChildren().add(c2);
+
+            em.persist(parent);
 
             em.flush();
             em.clear();
 
-            List<Memb> resultList = em.createQuery("select m from Memb m join fetch m.team", Memb.class)
-                    .getResultList();
+            Parent p1 = em.find(Parent.class, parent.getId());
+            p1.getChildren().remove(0); //orphanRemoval = true
 
             tx.commit();
         } catch (Exception e) {
@@ -51,6 +46,32 @@ public class JpaMain {
         }
 
         emf.close();
+    }
+
+    private static void method3(EntityManager em) {
+        Team t1 = new Team();
+        t1.setName("T1");
+        em.persist(t1);
+
+        Team t2 = new Team();
+        t2.setName("T2");
+        em.persist(t2);
+
+        Memb m1 = new Memb();
+        m1.setName("M1");
+        m1.setTeam(t1);
+        em.persist(m1);
+
+        Memb m2 = new Memb();
+        m2.setName("M2");
+        m2.setTeam(t2);
+        em.persist(m2);
+
+        em.flush();
+        em.clear();
+
+        List<Memb> resultList = em.createQuery("select m from Memb m join fetch m.team", Memb.class)
+                .getResultList();
     }
 
     private static void method2(EntityManager em) {
