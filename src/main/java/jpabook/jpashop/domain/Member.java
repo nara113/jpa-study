@@ -1,5 +1,6 @@
 package jpabook.jpashop.domain;
 
+import helloJpa2.Address;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,7 +17,5 @@ public class Member extends BaseEntity {
     @Column(name = "member_id")
     private Long id;
     private String name;
-    private String city;
-    private String street;
-    private String zipcode;
+    private Address address;
 }
