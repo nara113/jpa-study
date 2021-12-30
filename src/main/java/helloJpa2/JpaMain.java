@@ -18,11 +18,38 @@ public class JpaMain {
         tx.begin();
 
         try {
-            WorkPeriod w1 = new WorkPeriod(LocalDateTime.MAX, LocalDateTime.MAX);
-            WorkPeriod w2 = new WorkPeriod(LocalDateTime.MAX, LocalDateTime.MAX);
+            Memb m = new Memb();
+            m.getFavoriteFoods().add("apple");  //값타입 컬렉션은 cascade, orphanRemoval 자동 적용
 
-            System.out.println("w1 == w2 : " + (w1 == w2));
-            System.out.println("w1 equals w2 : " + (w1.equals(w2))); //값타입은 동등성비교 (equals 재정의)
+            m.setAddress(new Address("A","B","C"));
+
+            m.getAddressHistory().add(new Address("a","a","a"));
+            m.getAddressHistory().add(new Address("b","b","b"));
+
+            m.getAddresses().add(new AddressEntity(new Address("a","a","a")));
+            m.getAddresses().add(new AddressEntity(new Address("b","b","b")));
+
+            em.persist(m);
+
+            em.flush();
+            em.clear();
+
+            Memb member = em.find(Memb.class, m.getId());
+
+            //Set 값타입 수정
+            member.getFavoriteFoods().remove("apple");  //delete 쿼리
+            member.getFavoriteFoods().add("orange");    //insert 쿼리
+
+//            member.getAddress().setStreet("newA");   //값타입은 불변
+            member.setAddress(new Address("newA","B","C"));
+
+            //Address 값타입 컬렉션 수정
+            //address_history 테이블에서 member_id 전체 삭제후 insert (사용하면 안됨)
+            member.getAddressHistory().remove(new Address("a","a","a"));
+            member.getAddressHistory().add(new Address("newA","a","a"));
+
+            member.getAddresses().remove(0);
+            member.getAddresses().add(new AddressEntity(new Address("newA","a","a")));
 
             tx.commit();
         } catch (Exception e) {
@@ -32,6 +59,14 @@ public class JpaMain {
         }
 
         emf.close();
+    }
+
+    private static void method6() {
+        WorkPeriod w1 = new WorkPeriod(LocalDateTime.MAX, LocalDateTime.MAX);
+        WorkPeriod w2 = new WorkPeriod(LocalDateTime.MAX, LocalDateTime.MAX);
+
+        System.out.println("w1 == w2 : " + (w1 == w2));
+        System.out.println("w1 equals w2 : " + (w1.equals(w2))); //값타입은 동등성비교 (equals 재정의)
     }
 
     private static void method5(EntityManager em) {

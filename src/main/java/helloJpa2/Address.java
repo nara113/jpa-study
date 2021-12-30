@@ -1,11 +1,11 @@
 package helloJpa2;
 
 import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+        import lombok.EqualsAndHashCode;
+        import lombok.Getter;
+        import lombok.NoArgsConstructor;
 
-import javax.persistence.Embeddable;
+        import javax.persistence.Embeddable;
 
 @AllArgsConstructor
 @NoArgsConstructor
