@@ -1,6 +1,5 @@
 package jpql;
 
-import helloJpa2.Team;
 import jpabook.jpashop.domain.BaseEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,9 +17,9 @@ public class Memberr extends BaseEntity {
     private Long id;
     private String name;
     private int age;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "team_id")
-    private Team team;
+    private Teamm team;
 
     public Memberr(String name, int age) {
         this.name = name;
