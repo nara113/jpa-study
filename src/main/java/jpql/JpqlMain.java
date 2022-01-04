@@ -74,6 +74,21 @@ public class JpqlMain {
                 System.out.println(t.getName() + " " + t.getMembers().size());
             }
 
+            //엔티티 직접 사용 - 기본키, 외래키
+            Memberr member = em.createQuery("select m from Memberr m where m = :member", Memberr.class)
+                    .setParameter("member", m1)
+                    .getSingleResult();
+
+            System.out.println(member);
+
+            List<Memberr> members = em.createQuery("select m from Memberr m where m.team = :team", Memberr.class)
+                    .setParameter("team", t1)
+                    .getResultList();
+
+            for (Memberr memberr : members) {
+                System.out.println(memberr);
+            }
+
             tx.commit();
         } catch (Exception e) {
             tx.rollback();
