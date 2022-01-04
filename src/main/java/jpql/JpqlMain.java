@@ -89,6 +89,18 @@ public class JpqlMain {
                 System.out.println(memberr);
             }
 
+            //벌크 연산
+            int updateCount = em.createQuery("update Memberr set name = 'name'")
+                    .executeUpdate();
+
+            System.out.println("updateCount : " + updateCount);
+
+            em.clear();
+
+            Memberr member1 = em.find(Memberr.class, 3L);
+
+            System.out.println(member1.getName());
+
             tx.commit();
         } catch (Exception e) {
             tx.rollback();
