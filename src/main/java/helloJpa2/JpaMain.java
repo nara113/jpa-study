@@ -18,38 +18,7 @@ public class JpaMain {
         tx.begin();
 
         try {
-            Memb m = new Memb();
-            m.getFavoriteFoods().add("apple");  //값타입 컬렉션은 cascade, orphanRemoval 자동 적용
-
-            m.setAddress(new Address("A","B","C"));
-
-            m.getAddressHistory().add(new Address("a","a","a"));
-            m.getAddressHistory().add(new Address("b","b","b"));
-
-            m.getAddresses().add(new AddressEntity(new Address("a","a","a")));
-            m.getAddresses().add(new AddressEntity(new Address("b","b","b")));
-
-            em.persist(m);
-
-            em.flush();
-            em.clear();
-
-            Memb member = em.find(Memb.class, m.getId());
-
-            //Set 값타입 수정
-            member.getFavoriteFoods().remove("apple");  //delete 쿼리
-            member.getFavoriteFoods().add("orange");    //insert 쿼리
-
-//            member.getAddress().setStreet("newA");   //값타입은 불변
-            member.setAddress(new Address("newA","B","C"));
-
-            //Address 값타입 컬렉션 수정
-            //address_history 테이블에서 member_id 전체 삭제후 insert (사용하면 안됨)
-            member.getAddressHistory().remove(new Address("a","a","a"));
-            member.getAddressHistory().add(new Address("newA","a","a"));
-
-            member.getAddresses().remove(0);
-            member.getAddresses().add(new AddressEntity(new Address("newA","a","a")));
+            method4(em);
 
             tx.commit();
         } catch (Exception e) {
@@ -59,6 +28,41 @@ public class JpaMain {
         }
 
         emf.close();
+    }
+
+    private static void method7(EntityManager em) {
+        Memb m = new Memb();
+        m.getFavoriteFoods().add("apple");  //값타입 컬렉션은 cascade, orphanRemoval 자동 적용
+
+        m.setAddress(new Address("A","B","C"));
+
+        m.getAddressHistory().add(new Address("a","a","a"));
+        m.getAddressHistory().add(new Address("b","b","b"));
+
+        m.getAddresses().add(new AddressEntity(new Address("a","a","a")));
+        m.getAddresses().add(new AddressEntity(new Address("b","b","b")));
+
+        em.persist(m);
+
+        em.flush();
+        em.clear();
+
+        Memb member = em.find(Memb.class, m.getId());
+
+        //Set 값타입 수정
+        member.getFavoriteFoods().remove("apple");  //delete 쿼리
+        member.getFavoriteFoods().add("orange");    //insert 쿼리
+
+//            member.getAddress().setStreet("newA");   //값타입은 불변
+        member.setAddress(new Address("newA","B","C"));
+
+        //Address 값타입 컬렉션 수정
+        //address_history 테이블에서 member_id 전체 삭제후 insert (사용하면 안됨)
+        member.getAddressHistory().remove(new Address("a","a","a"));
+        member.getAddressHistory().add(new Address("newA","a","a"));
+
+        member.getAddresses().remove(0);
+        member.getAddresses().add(new AddressEntity(new Address("newA","a","a")));
     }
 
     private static void method6() {
@@ -87,9 +91,12 @@ public class JpaMain {
         Child c1 = new Child();
         Child c2 = new Child();
 
-        // cascade ALL : c1, c2 도 persistk
-        parent.getChildren().add(c1);
-        parent.getChildren().add(c2);
+        // cascade ALL : c1, c2 도 persist
+        //parent.getChildren().add(c1);
+        //parent.getChildren().add(c2);
+
+        parent.addChild(c1);
+        parent.addChild(c2);
 
         em.persist(parent);
 

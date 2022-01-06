@@ -18,4 +18,9 @@ public class Parent {
 
     @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Child> children = new ArrayList<>();
+
+    public void addChild(Child child) {
+        this.children.add(child);
+        child.setParent(this);
+    }
 }
